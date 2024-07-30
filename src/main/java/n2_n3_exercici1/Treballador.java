@@ -1,4 +1,4 @@
-package n2exercici1;
+package n2_n3_exercici1;
 
 public abstract class Treballador {
 	private String nom;
@@ -11,6 +11,10 @@ public abstract class Treballador {
 		this.nom = nom;
 		this.cognom = cognom;
 		this.preuPerHora = preuPerHora;
+	}
+	
+	public String getNomComplet() {
+		return this.nom + this.cognom;
 	}
 
 	public double calcularSou(int horesTreballades){

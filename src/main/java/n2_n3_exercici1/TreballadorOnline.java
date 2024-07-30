@@ -1,7 +1,7 @@
-package n2exercici1;
+package n2_n3_exercici1;
 
 
-@SerializeToJSON
+@WhereToSerialize (directory = "serialize\\TreballadorsOnline")
 public class TreballadorOnline extends Treballador {
 	
 	private static float preuInternet;

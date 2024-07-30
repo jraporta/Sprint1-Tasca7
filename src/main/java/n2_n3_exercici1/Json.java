@@ -1,13 +1,7 @@
-package n2exercici1;
+package n2_n3_exercici1;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -55,26 +49,30 @@ public class Json {
 		}
 	}
 	
-	public void serialize() throws IOException, IllegalArgumentException, IllegalAccessException {
-		//retrieve path from annotation
+	public String toJson() {
+		String response = "";
 		int i = 0;
-		Path path = Paths.get("object.txt").normalize();
-		try(BufferedWriter output = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)){
-			String fmt = "  \"%s\": \"%s\"";
-			output.write(String.format("{%n"));
-			for (ArrayList<Field> f : this.fields) {
-				for (Field f2 : f) {
-					boolean originalAccessible = f2.canAccess(this.obj);
-					f2.setAccessible(true);
-					String value = f2.get(this.obj).toString();
-					f2.setAccessible(originalAccessible);
-					String name = f2.getName().toString();
-					i++;
-					output.write(String.format(fmt + (i == this.numberOfNonStaticFields ? "" : ",%n"), name, value));					
+		String fmt = "  \"%s\": \"%s\"";
+		response += "{%n";
+		for (ArrayList<Field> f : this.fields) {
+			for (Field f2 : f) {
+				String name = f2.getName().toString();
+				boolean originalAccessible = f2.canAccess(this.obj);
+				f2.setAccessible(true);
+				String value;
+				try {
+					value = f2.get(this.obj).toString();
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					System.out.printf("Error retrieving %s value: %s", name, e.getMessage());
+					throw new RuntimeException();
 				}
-			} 
-			output.write(String.format("%n}"));
-		}
+				f2.setAccessible(originalAccessible);
+				i++;
+				response += String.format(fmt + (i == this.numberOfNonStaticFields ? "" : ",%n"), name, value);					
+			}
+		} 
+		response += "%n}";
+		return response;
 	}
 
 
