@@ -2,13 +2,17 @@ package n1exercici1;
 
 public class TreballadorPresencial extends Treballador{
 	
-	private static float benzina;
+	private static double benzina;
+	
+	static {
+		benzina = 45;
+	}
 		
 	public TreballadorPresencial(String nom, String cognom, double preuPerHora) {
 		super(nom, cognom, preuPerHora);
 	}
 
-	public static void setBenzina (float benzina) {
+	public static void setBenzina (double benzina) {
 		TreballadorPresencial.benzina = benzina;
 	}
 	
