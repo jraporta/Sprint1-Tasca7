@@ -19,15 +19,7 @@ public class Json {
 		getAllDeclaredFields(this.objClass);
 		removeStaticFields();
 	}
-	
-	public Class<?> getMyClass() {
-		return objClass;
-	}
 
-	public ArrayList<ArrayList<Field>> getFields() {
-		return fields;
-	}
-	
 	public void getAllDeclaredFields(Class<?> c){
 		if (c != Object.class) {
 			this.fields = new ArrayList<>();
@@ -50,13 +42,13 @@ public class Json {
 	}
 	
 	public String toJson() {
-		String response = "";
+		StringBuilder response = new StringBuilder();
 		int i = 0;
 		String fmt = "  \"%s\": \"%s\"";
-		response += "{%n";
+		response.append("{%n");
 		for (ArrayList<Field> f : this.fields) {
 			for (Field f2 : f) {
-				String name = f2.getName().toString();
+				String name = f2.getName();
 				boolean originalAccessible = f2.canAccess(this.obj);
 				f2.setAccessible(true);
 				String value;
@@ -68,11 +60,11 @@ public class Json {
 				}
 				f2.setAccessible(originalAccessible);
 				i++;
-				response += String.format(fmt + (i == this.numberOfNonStaticFields ? "" : ",%n"), name, value);					
+				response.append(String.format(fmt + (i == this.numberOfNonStaticFields ? "%n" : ",%n"), name, value));
 			}
 		} 
-		response += "%n}";
-		return response;
+		response.append("}");
+		return response.toString();
 	}
 
 
